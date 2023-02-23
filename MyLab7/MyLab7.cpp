@@ -1,7 +1,11 @@
-﻿#include <iostream>
-#include <stdio.h>
+﻿#include <Windows.h>
+#include <iostream>
+#include <fstream>
+#include <sstream>
+//#include <stdio.h>
 #include <string>
-#include <Windows.h>
+#include <vector>
+
 
 using namespace std;
 
@@ -17,90 +21,118 @@ else cout << "file created and opened\n\n";\
 #define CalculSpaces(symbolsCount) \
 	(widthSymbols - symbolsCount) / 2;\
 
+void AlignCenterText(string &str) {
+	string buffString = str;
+	int spaceBorder = (100-buffString.size())/2;
+
+	str.clear();
+	for (int space = 0; space < spaceBorder; space++)//begin
+		str += " ";
+	str += buffString;
+	for (int space = 0; space < spaceBorder; space++)//back
+		str += " ";
+}
+
+void AlignRightText(string& str) {
+
+}
 
 int main()
 {
 
 	SetConsoleOutputCP(1251);
 	SetConsoleCP(1251);
+	system("TextDocument.txt");
 
-	/*const int width = 1400;
-	int countSym = 0;
-	string buffer = "";
-	string str = "Hello World!                           ";
-
-	cout << "Standart: |" << str << endl;
-	for (int i = 0; i < 40; i++)if (str[i] != ' ')countSym += 1;
-
-	for (int space = 0; space < (41 - countSym); space++)buffer += ' ';
-	cout << "Edit ver: |" << buffer + str << endl;*/
-
-
-
-	char universityName[100], faculty[100], department[100], discipline[100], topic[100], groupName[100], studentName[100], teacherName[100];
+	//char universityName[100], faculty[100], discipline[100], topic[100], groupName[100], studentName[100], teacherName[100];
+	string studentName, teacherName, universityName, faculty, department, discipline, topic, groupName;
 	int numberLab = 0, yearOutput = 0;
 
-	FILE* newDocument = fopen("TextDocument.txt", "w+");
-	checkFile(newDocument)
+	//FILE* newDocument = fopen("TextDocument.txt", "w+");
+	//checkFile(newDocument)
+	ofstream tittleFileWrite;
+	tittleFileWrite.open("TextDocument.txt");
+	if (tittleFileWrite.fail()) {
+		cout << "Failed to opening file.\n";
+		return 1;
+	}
 
 	cout << "Ваше прізвище та ініціали (ПППП І.Б. > ENTER):\n";
-	cin.getline(studentName, 100); 
+	getline(cin, studentName);
+
 	cout<< "Прізвище та ініціали викладача:\n";
-	cin.getline(teacherName, 100); 
+	getline(cin, teacherName);
+
 	cout << "Назва вашо\ групи:\n";
-	cin.getline(groupName, 100);
+	getline(cin, groupName);
 
 	cout << "Назва вашого університету (ENTER) факультету (ENTER) кафедри:\n";
-	cin.getline(universityName, 100); cin.getline(faculty, 100); cin.getline(department, 100);
+	getline(cin, universityName); getline(cin, faculty); getline(cin, department);
 
 	cout << "Назва дисципліни (ENTER) тема лабораторної рорботи (ENTER) її номер (ENTER) та рік видачі (ENTER):\n";
-	cin.getline(discipline, 20); cin.getline(topic, 100);
+	getline(cin, discipline); getline(cin, topic);
 	cin >> numberLab;  cin >> yearOutput;
 
-	fprintf(newDocument, " Міністерство освіти і науки України\n %s\n Факультет %s\n Кафедра %s\n\n\n\n\n\n Лабораторна робота  №%d\n З дисципліни “%s”\n тема : “%s”\n\n\n\n\n\n\n Виконав: студент групи %s %s\n Перевірив : %s\n\n\n\n\n\n Вінниця %d", universityName, faculty, department, numberLab, discipline, topic, groupName, studentName, teacherName, yearOutput);
+	//fprintf(newDocument, " Міністерство освіти і науки України\n %s\n Факультет %s\n Кафедра %s\n\n\n\n\n\n Лабораторна робота  №%d\n З дисципліни “%s”\n тема : “%s”\n\n\n\n\n\n\n Виконав: студент групи %s %s\n Перевірив : %s\n\n\n\n\n\n Вінниця %d", universityName, faculty, department, numberLab, discipline, topic, groupName, studentName, teacherName, yearOutput);
 
-	cout << "Документ створено\n";
-	rewind(newDocument);
+	//cout << "Документ створено\n";
+	//rewind(newDocument);
+	tittleFileWrite << "Міністерство освіти і науки України\n "
+		<< universityName << "\n Факультет " << faculty
+		<< "\n Кафедра " << department
+		<< "\n\n\n\n\n\n Лабораторна робота  № "
+		<< numberLab << "\n З дисципліни “ " << discipline
+		<< "”\n тема : “ " << topic
+		<< "”\n\n\n\n\n\n\n Виконав : студент групи " << groupName
+		<< " " << studentName
+		<< "\n Перевірив : " << teacherName
+		<< "\n\n\n\n\n\n Вінниця " << yearOutput;
 
-	char flag;
-	cout << "Вирівняти документ? <T-так> <N-ні>\n";
-	cin >> flag;
+	tittleFileWrite.close();
 
-	if (flag == 'T') {
-	
+
+	ifstream tittleFileRead;
+	tittleFileRead.open("TextDocument.txt");
+	if (tittleFileRead.fail()) {
+		cout << "Failed to open file.\n";
+		return 1;
 	}
 
-
-	int stringsSize, countSymbols=0;
-	//int* countSpaces = new int[stringsSize];
-	//string* fileText = new string[stringsSize];	
-	string* fileText = new string[26];
-
-	char* fileSpaces = new char[26];
-	fileSpaces = new char[200];
-	char rubb=' ';
-
-	/*for (stringsSize = 0; !feof(newDocument); stringsSize++) {
-		if ((fscanf(newDocument, "%c", rubb) != ' '))countSymbols += 1;
-		countSymbols = 0;
-		for (int i = 0; i < CalculSpaces(countSymbols) i++)fileSpaces[stringsSize] += ' ';
+	string currentStr;
+	vector <string> allContentFile;
+	while (!tittleFileRead.eof()) {
+		getline(tittleFileRead, currentStr);//get spec str from file
+		AlignCenterText(currentStr);
+		allContentFile.push_back(currentStr);
 	}
-	rewind(newDocument);*/
-	
-	/*char rubb[200];
-	for (stringsSize = 0; !feof(newDocument); stringsSize++) {
-		fgets(rubb, 100, newDocument);
-		
-	}
-	rewind(newDocument);*/
-	
+	tittleFileRead.close();
+	//stringstream buff;
+	//buff << tittleFile.rdbuf(); //pointer on a string obj
+	//string allContentFile = buff.str();
+	//
+	//tittleFile.close();
 
-	//char buff[200];
-	//cout << stringsSize;
-	//for (int i = 0; i < stringsSize; i++) {
-	//	fileText[i] = fgets(buff, 200, newDocument);
-	//}
-	//for (int i = 0; i < stringsSize; i++)printf("%c%s", fileSpaces[i],fileText[i]);
+
+	//ofstream tittleFile;
+	//tittleFile.open("TextDocument.txt", ofstream::out | ofstream::trunc); //clear file
+
+			//write centering lines 
+	//ofstream tittleFileWrite;
+	tittleFileWrite.open("TextDocument.txt");
+	if (tittleFileWrite.fail()) {
+		cout << "Failed to opening file.\n";
+		return 1;
+	}
+	for (int line = 0; line < allContentFile.size(); line++)//write centering str to file
+		tittleFileWrite << allContentFile.at(line)<<endl;
+
+	tittleFileWrite.close();
+
+	cout << "Бажаєте переглянути файл? <0-ні> <1-так>";
+	if (cin)
+		system("TextDocument.txt");
+	//_spawnlp(_P_WAIT, "C:\\WINDOWS\\system32\\notepad.exe", "notepad.exe", "Points.txt", NULL);
+
 }
 
 
